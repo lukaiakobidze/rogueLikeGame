@@ -32,5 +32,9 @@ class MovementAction(Action):
             return  
         if not engine.game_map.tiles["walkable"][dest_x, dest_y]:
             return  
+        for each in engine.entities:
+            if dest_x == each.x and dest_y == each.y:
+                return       
+    
 
         entity.move(self.dx, self.dy)
