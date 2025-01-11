@@ -97,8 +97,8 @@ def generate_dungeon(map_width: int, map_height: int, room_max_size: int, room_m
         else:
             for x,y in tunnel_between(rooms[-1].center, new_room.center):
                 dungeon.tiles[x, y] = tile_types.floor
-
-        place_entities(new_room, dungeon, max_monsters_per_room)
+        if not len(rooms) == 0:
+            place_entities(new_room, dungeon, max_monsters_per_room)
         
         rooms.append(new_room)
     
