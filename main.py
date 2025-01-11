@@ -13,8 +13,8 @@ def main() -> None:
     map_width = 80
     map_height = 45
     
-    room_max_size = 10
-    room_min_size = 6
+    room_max_size = 12
+    room_min_size = 4
     max_rooms = 30
 
     tileset = tcod.tileset.load_tilesheet(
