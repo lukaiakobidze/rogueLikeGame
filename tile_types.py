@@ -26,7 +26,7 @@ def new_tile(*,  walkable: int, transparent: int, dark: Tuple[int, Tuple[int, in
     
     return np.array((walkable, transparent, dark, light), dtype=tile_dt)
 
-SHROUD = np.array((ord(" "), (255, 255, 255), (0, 0, 0)), dtype=graphic_dt)
+SHROUD = np.array((ord(" "), (255, 255, 255), (5, 5, 5)), dtype=graphic_dt)
 
 floor = new_tile(
     walkable=True,
