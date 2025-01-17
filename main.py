@@ -3,7 +3,7 @@ import tcod
 from engine import Engine
 import entity_factories
 from proc_gen import generate_dungeon
-
+import color
 
 
 def main() -> None:
@@ -21,7 +21,7 @@ def main() -> None:
     tileset = tcod.tileset.load_tilesheet(
         "dejavu10x10_gs_tc.png", 32, 8, tcod.tileset.CHARMAP_TCOD
     )
-
+    
     
     player = copy.deepcopy(entity_factories.player)
     
@@ -29,6 +29,9 @@ def main() -> None:
     engine.game_map = generate_dungeon(map_width, map_height, room_max_size, room_min_size, max_rooms, max_monsters_per_room, engine=engine)
     engine.update_fov()
     
+    engine.message_log.add_message(
+        "Hello and welcome, adventurer, to yet another dungeon!", color.welcome_text
+    )
     with tcod.context.new_terminal(
         screen_width,
         screen_height,
