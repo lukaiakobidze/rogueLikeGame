@@ -34,6 +34,13 @@ class GameMap:
 
         return None
 
+    def get_entity_color_at_location(self, location_x: int, location_y: int) -> Optional[Entity]:
+        for entity in self.entities:
+            if  entity.x == location_x and entity.y == location_y:
+                return entity.color
+
+        return None
+    
     def get_actor_at_location(self, x: int, y: int) -> Optional[Actor]:
         for actor in self.actors:
             if actor.x == x and actor.y == y:

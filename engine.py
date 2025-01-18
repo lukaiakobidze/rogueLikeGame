@@ -46,5 +46,5 @@ class Engine:
             maximum_value=self.player.fighter.max_hp,
             total_width=20,
         )
-        render_names_at_mouse_location(console, *self.mouse_location, self)
+        render_names_at_mouse_location(console, *self.mouse_location, self, self.game_map)
         
