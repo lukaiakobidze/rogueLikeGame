@@ -4,7 +4,7 @@ from engine import Engine
 import entity_factories
 from proc_gen import generate_dungeon
 import color
-
+import traceback
 
 def main() -> None:
     screen_width = 120 
@@ -17,6 +17,7 @@ def main() -> None:
     room_min_size = 6
     max_rooms = 20
     max_monsters_per_room = 2
+    max_items_per_room = 1
     
     tileset = tcod.tileset.load_tilesheet(
         "dejavu10x10_gs_tc.png", 32, 8, tcod.tileset.CHARMAP_TCOD
@@ -26,7 +27,7 @@ def main() -> None:
     player = copy.deepcopy(entity_factories.player)
     
     engine = Engine(player=player)
-    engine.game_map = generate_dungeon(map_width, map_height, room_max_size, room_min_size, max_rooms, max_monsters_per_room, engine=engine)
+    engine.game_map = generate_dungeon(map_width, map_height, room_max_size, room_min_size, max_rooms, max_monsters_per_room, max_items_per_room, engine=engine)
     engine.update_fov()
     
     engine.message_log.add_message(
@@ -48,7 +49,14 @@ def main() -> None:
             engine.event_handler.on_render(console=root_console)
             context.present(root_console)
             
-            engine.event_handler.handle_events(context)
+            try:
+                for event in tcod.event.wait():
+                    context.convert_event(event)
+                    engine.event_handler.handle_events(event)
+            except Exception:  # Handle exceptions in game.
+                traceback.print_exc()  # Print error to stderr.
+                # Then print the error to the message log.
+                engine.message_log.add_message(traceback.format_exc(), color.error)
                 
                 
 if __name__ == "__main__":
