@@ -211,7 +211,7 @@ class MainGameEventHandler(EventHandler):
             action = WaitAction(player)
 
         elif key == tcod.event.K_ESCAPE:
-            raise SystemExit()
+            self.engine.event_handler = GameQuitEventHandler(self.engine)
         
         elif key == tcod.event.K_v:
             self.engine.event_handler = HistoryViewer(self.engine)
@@ -231,9 +231,34 @@ class GameOverEventHandler(EventHandler):
     
     def ev_keydown(self, event: tcod.event.KeyDown) -> None:
         if event.sym == tcod.event.K_ESCAPE:
+            self.engine.event_handler = GameQuitEventHandler(self.engine)
+    
+class GameQuitEventHandler(EventHandler):
+    
+    def on_render(self, console: tcod.Console) -> None:
+        super().on_render(console)
+
+        width=30
+        height=2
+        console.draw_frame(
+            x=60-int(width/2),
+            y=40-int(height/2),
+            width=width,
+            height=height,
+            clear=True,
+            fg=(255, 255, 255),
+            bg=(0, 0, 0),
+        )
+        console.print(50, 39, "Press Enter to exit!")
+        
+    def ev_keydown(self, event: tcod.event.KeyDown) -> None:
+        if event.sym == tcod.event.K_ESCAPE and self.engine.player.is_alive:
+            self.engine.event_handler = MainGameEventHandler(self.engine)
+        elif event.sym == tcod.event.K_ESCAPE and not self.engine.player.is_alive:
+            self.engine.event_handler = GameOverEventHandler(self.engine)
+        elif event.sym == tcod.event.K_RETURN:
             raise SystemExit()
-    
-    
+
 CURSOR_Y_KEYS = {
     tcod.event.K_UP: -1,
     tcod.event.K_DOWN: 1,
@@ -289,7 +314,7 @@ class HistoryViewer(EventHandler):
             self.cursor = 0  # Move directly to the top message.
         elif event.sym == tcod.event.K_END:
             self.cursor = self.log_length - 1  # Move directly to the last message.
-        elif event.sym == tcod.event.K_v:
+        elif event.sym == tcod.event.K_v or event.sym == tcod.event.K_ESCAPE:
             if self.engine.player.is_alive:
                 self.engine.event_handler = MainGameEventHandler(self.engine)
             else:
