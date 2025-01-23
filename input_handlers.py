@@ -5,6 +5,7 @@ import exceptions
 import tcod.event
 from actions import Action, BumpAction, WaitAction, PickupAction
 import actions
+import variables as var
 if TYPE_CHECKING:
     from engine import Engine
     from entity import Item
@@ -232,6 +233,8 @@ class GameOverEventHandler(EventHandler):
     def ev_keydown(self, event: tcod.event.KeyDown) -> None:
         if event.sym == tcod.event.K_ESCAPE:
             self.engine.event_handler = GameQuitEventHandler(self.engine)
+        if event.sym == tcod.event.K_v:
+            self.engine.event_handler = HistoryViewer(self.engine)
     
 class GameQuitEventHandler(EventHandler):
     
@@ -239,17 +242,19 @@ class GameQuitEventHandler(EventHandler):
         super().on_render(console)
 
         width=30
-        height=2
+        height=3
+        x=int(var.screen_width/2)-int(width/2)
+        y=int(var.screen_height/2)-int(height/2)
         console.draw_frame(
-            x=60-int(width/2),
-            y=40-int(height/2),
+            x=x,
+            y=y,
             width=width,
             height=height,
             clear=True,
             fg=(255, 255, 255),
             bg=(0, 0, 0),
         )
-        console.print(50, 39, "Press Enter to exit!")
+        console.print(x+int(width/5-1), y+1, "Press Enter to exit!")
         
     def ev_keydown(self, event: tcod.event.KeyDown) -> None:
         if event.sym == tcod.event.K_ESCAPE and self.engine.player.is_alive:

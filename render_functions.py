@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from typing import TYPE_CHECKING
-
+import variables as var
 import color
 
 if TYPE_CHECKING:
@@ -23,12 +23,12 @@ def render_bar(console: Console, current_value: int, maximum_value: int, total_w
     
     bar_width = int(float(current_value) / maximum_value * total_width)
 
-    console.draw_rect(x=0, y=75, width=total_width, height=1, ch=1, bg=color.bar_empty)
+    console.draw_rect(x=0, y=var.screen_height - 5, width=total_width, height=1, ch=1, bg=color.bar_empty)
 
     if bar_width > 0:
-        console.draw_rect(x=0, y=75, width=bar_width, height=1, ch=1, bg=color.bar_filled)
+        console.draw_rect(x=0, y=var.screen_height - 5, width=bar_width, height=1, ch=1, bg=color.bar_filled)
 
-    console.print(x=1, y=75, string=f"HP: {current_value}/{maximum_value}", fg=color.bar_text)
+    console.print(x=1, y=var.screen_height - 5, string=f"HP: {current_value}/{maximum_value}", fg=color.bar_text)
     
 def render_names_at_mouse_location(console: Console, x: int, y: int, engine: Engine, gamemap: GameMap) -> None:
     

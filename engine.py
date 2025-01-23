@@ -6,7 +6,7 @@ from render_functions import render_bar, render_names_at_mouse_location
 from input_handlers import MainGameEventHandler
 from message_log import MessageLog
 import exceptions
-
+import variables as var
 if TYPE_CHECKING:
     from entity import Actor
     from game_map import GameMap
@@ -34,7 +34,7 @@ class Engine:
         self.game_map.visible[:] = compute_fov(
             self.game_map.tiles["transparent"],
             (self.player.x, self.player.y),
-            radius=16,
+            radius=var.fov_radius,
         )
         # If a tile is "visible" it should be added to "explored".
         self.game_map.explored |= self.game_map.visible
@@ -43,12 +43,16 @@ class Engine:
     def render(self, console: Console) -> None:
         
         self.game_map.render(console)
-        self.message_log.render(console=console, x=80, y=75, width=40, height=5)
+        self.message_log.render(console=console, x=var.screen_width-60, y=var.screen_height-5, width=60, height=4)
         render_bar(
             console=console,
             current_value=self.player.fighter.hp,
             maximum_value=self.player.fighter.max_hp,
-            total_width=20,
+            total_width=var.bar_width,
         )
+        console.print(var.bar_width + 1, var.screen_height-5, "E: use item in inventory.")
+        console.print(var.bar_width + 1, var.screen_height-4, "Q: drop item from inventory.")
+        console.print(var.bar_width + 1, var.screen_height-3, "F: pick up item.")
         render_names_at_mouse_location(console, *self.mouse_location, self, self.game_map)
+        
         
