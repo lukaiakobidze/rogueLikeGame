@@ -169,19 +169,7 @@ class InventoryEventHandler(AskUserEventHandler):
         else:
             console.print(x + 1, y + 1, "(Empty)")
 
-#     INVENTORY_KEYS = {
-#     tcod.event.K_1,
-#     tcod.event.K_2,
-#     tcod.event.K_3,
-#     tcod.event.K_4,
-#     tcod.event.K_5,
-#     tcod.event.K_6,
-#     tcod.event.K_7,
-#     tcod.event.K_8,
-#     tcod.event.K_9,
-#     tcod.event.K_0,
-# }
-    
+
     def ev_keydown(self, event: tcod.event.KeyDown) -> Optional[Action]:
         player = self.engine.player
         
@@ -194,14 +182,7 @@ class InventoryEventHandler(AskUserEventHandler):
                         self.engine.message_log.add_message("Invalid entry.", color.invalid)
                         return None
                     return self.on_item_selected(selected_item)
-
-        # if 0 <= key <= player.inventory.capacity:
-        #     try:
-        #         selected_item = player.inventory.items[key]
-        #     except IndexError:
-        #         self.engine.message_log.add_message("Invalid entry.", color.invalid)
-        #         return None
-        #     return self.on_item_selected(selected_item)
+                
         return super().ev_keydown(event)
 
     def on_item_selected(self, item: Item) -> Optional[Action]:
